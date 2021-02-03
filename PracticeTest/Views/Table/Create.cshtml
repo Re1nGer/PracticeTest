@@ -1,0 +1,46 @@
+﻿@model PracticeTest.Models.PersonEntity
+
+<p>
+    <a class="btn-link" asp-action="Index">Back To Table</a>
+</p>
+@{
+    ViewBag.Title = "Create";
+}
+
+
+@using (Html.BeginForm("HandleForm", "Table", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-sm-2" })
+        @Html.EditorFor(model => model.FirstName, new { @class = "form-control col-sm-10" })
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label  col-sm-2" })
+        @Html.EditorFor(model => model.LastName, new { @class = "form-control col-sm-10" })
+        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BirthDate, htmlAttributes: new { @class = "control-label  col-sm-2" })
+        @Html.EditorFor(model => model.BirthDate, new { @type = "date", @class = "form-control col-sm-10" })
+        @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label  col-sm-2" })
+        @Html.EditorFor(model => model.PhoneNumber, new { @type = "tel", @class = "form-control col-sm-10" })
+        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label  col-sm-2" })
+        @Html.EditorFor(model => model.Address, new { @type = "type", @class = "form-control col-sm-10" })
+        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+}
