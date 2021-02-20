@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace PracticeTest.Models
 {
     public class PersonEntity
     {
-        
+        [Key]
         public int Id { get; set; }
         
         [Required]
@@ -23,11 +26,15 @@ namespace PracticeTest.Models
         public DateTime BirthDate { get; set; }
         
         [Required]
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
-        
+        [Display(Name= "Phone Number")]
+        [ForeignKey("PersonId")]
+        public virtual ICollection<PhoneNumberEntity> PhoneEntity { get; set; }
+
+        [ForeignKey("PersonId")]
+        public virtual ICollection<AddressEntity> Addresses { get; set; }
+
         [Required]
-        public string Address { get; set; }
+        public string PrimaryAddress { get; set; }
 
         public int SpouseId { get; set; }
         

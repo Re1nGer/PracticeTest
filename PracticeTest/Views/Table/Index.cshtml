@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PracticeTest.Models.PersonEntity>
+﻿@model PracticeTest.ViewModel.PersonViewModel
 @using PracticeTest.Models
 
 @{
@@ -7,9 +7,9 @@
 
 <h1>Table</h1>
 
-<p>
-    <a asp-action="Create">Create New Record</a>
-</p>
+<button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
 <table class="table">
     <thead>
@@ -30,11 +30,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Persons)
         {
             <tr>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
                 <td>
@@ -47,10 +46,10 @@
                     @Html.DisplayFor(modelItem => item.BirthDate)
                 </td>
                 <td>
-                   @CustomHelperClass.CreateCustomSelectTag(item.Id, item.SpouseId, item.SpouseName)
+                    @CustomHelperClass.CreateCustomSelectTag(item.Id, item.SpouseId, item.SpouseName)
                 </td>
             </tr>
-                }
+        }
     </tbody>
 </table>
 
@@ -63,9 +62,11 @@
             </div>
             <div class="modal-body">
                 <form>
+
                     <div class="ui-widget ui-front">
                         <label for="myInput" class="control-label"> Choose Spouse</label>
                         <input id="selectSpouse" class="form-control" type="text">
+
                     </div>
                 </form>
             </div>
@@ -77,6 +78,76 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="addModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Person</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <form class="container-fluid" action="/Table/PopUpForm" method="post" name="registration">
+
+                    <div class="form-group">
+                        <label for="firstName">Email address:</label>
+                        <input name="firstName" type="text" class="form-control" placeholder="Enter your firstName" id="firstName">
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input name="lastName" type="text" class="form-control" placeholder="Last Name" id="lastName">
+                       
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Birth date:</label>
+                        <input name="birthDate" class="form-control" type="date" value="1990-01-01">
+                        
+                    </div>
+
+                    <div class="form-group" id="newRow">
+                        <label class="form-label">Phone Number</label>
+                        <div class="row mx-1">
+                            <input id="phoneNumber" name="phoneNumber" class="form-control col-md-10" type="text" placeholder="(+371) 23 321 152">
+                            <button id="addRow" type="button" class="btn btn-primary offset-1 col-md-1">+</button>
+                        </div>
+            
+                    </div>
+
+                    <div class="form-group" id="newAddressRow">
+                        <label class="form-label">Address</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <textarea name="address" class="form-control col-md-7" rows="1"></textarea>
+                            <div class="radio">
+                                <label><input name="primary" class="m-3 radio_button" type="radio" checked>Primary</label>
+                            </div>
+                            <button class="btn btn-primary offset-1 col-md-1 h-50" type="button" id="addAddress">+</button>
+                        </div>
+                       
+                    </div>
+
+                    <button id="submit_b" type="submit" class="btn btn-primary">Submit</button>
+
+                </form>
+            </div>
+
+            <div class="modal-footer d-flex justify-content-between">
+                <button id="cancel_button" type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+                <button id="submit_button" type="button" class="btn btn-default btn-success">Submit</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
 
 
 

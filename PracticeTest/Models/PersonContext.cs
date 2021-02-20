@@ -10,6 +10,8 @@ namespace PracticeTest.Models
 
         }
         public DbSet<PersonEntity> Person { get; set; }
+        public DbSet<PhoneNumberEntity> PhoneNumbers { get; set; }
+        public DbSet<AddressEntity> Addresses { get; set; } 
     }
 }
 

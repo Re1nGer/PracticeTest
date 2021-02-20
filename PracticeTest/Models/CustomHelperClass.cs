@@ -9,7 +9,7 @@ namespace PracticeTest.Models
         {
             if(SpouseId == 0)
             {
-                var singleTag = $"<select  data-id = {PersonId} id = \"mySelect\"><option default>Single</option><option>Married</option></select>";
+                var singleTag = $"<select data-id = {PersonId} id = \"mySelect\"><option default>Single</option><option>Married</option></select>";
                 return new HtmlString(singleTag); 
             } else
             {
