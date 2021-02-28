@@ -15,9 +15,9 @@ namespace PracticeTest.Controllers
 
         private IPersonManipulation _personService; 
 
-        public TableController(IPersonManipulation manipulation)
+        public TableController(IPersonManipulation personService)
         {
-            _personService = manipulation;
+            _personService = personService;
         }
 
         public IActionResult Index()
