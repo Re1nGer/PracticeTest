@@ -16,7 +16,7 @@ $('#myModal').on('shown.bs.modal', function (e) {
     $.ajax({
         url: "http://localhost:52009/Home/GetPersonNames",
         type: "POST",
-        data: { Id: Id },
+        data: { id: Id },
         async: false,
         success: function (response) {
             data = response;

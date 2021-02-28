@@ -4,107 +4,61 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PracticeTest.ViewModel; 
-using PracticeTest.Models;
+using PracticeTest.ViewModel;
+using PersonData.Models;
+using PersonData;
 
 namespace PracticeTest.Controllers
 {
     public class TableController : Controller
     {
 
-        private readonly PersonContext _personContext;
+        private IPersonManipulation _personService; 
 
-        public TableController(PersonContext personContext)
+        public TableController(IPersonManipulation manipulation)
         {
-            _personContext = personContext;
-
+            _personService = manipulation;
         }
 
         public IActionResult Index()
         {
-            PersonViewModel viewModel = new PersonViewModel() { Persons = _personContext.Person };
+            PersonViewModel viewModel = new PersonViewModel() {
+                Persons = _personService.GetAllPersons()
+            };
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public JsonResult GetPersonNames(int Id)
+        public JsonResult GetPersonNames(int id)
         {
-            var recordsToSend = _personContext.Person.Except(_personContext.Person.Where(p => p.Id == Id)).Where(p => p.SpouseId == 0).Select(p => new { p.FirstName, p.Id });
+            var recordsToSend = _personService.GetAvailablePersonNames(id); 
             return Json(recordsToSend);
         }
 
+
         [HttpPost]
-        public void MarryTwoPerson(int PersonId, int SpouseId)
+        public void MarryTwoPerson(int personId, int spouseId)
         {
-            var firstRecord = _personContext.Person.Find(PersonId);
-            var secondRecord = _personContext.Person.Find(SpouseId);
-
-            firstRecord.SpouseId = SpouseId;
-            firstRecord.SpouseName = secondRecord.FirstName;
-
-            secondRecord.SpouseId = PersonId;
-            secondRecord.SpouseName = firstRecord.FirstName;
-
-            _personContext.Entry(firstRecord).State = EntityState.Modified;
-            _personContext.Entry(secondRecord).State = EntityState.Modified;
-            _personContext.SaveChanges();
+            _personService.Marry(personId, spouseId); 
         }
 
         [HttpPost]
         public IActionResult PopUpForm(IFormCollection form)
         {
-            PersonViewModel viewModel = new PersonViewModel() { Persons = _personContext.Person };
+            TryUpdateModelAsync(form);
 
-            PersonEntity person = new PersonEntity
+           if(ModelState.IsValid)
             {
-                FirstName = form["firstName"],
-                LastName = form["lastName"],
-                BirthDate = Convert.ToDateTime(form["birthDate"]),
-                PrimaryAddress = form["primaryAddress"],
-                PhoneEntity = new List<PhoneNumberEntity>(),
-                Addresses = new List<AddressEntity>()
-            };
-
-            TryUpdateModelAsync(person);
-
-
-            if (ModelState.IsValid)
-            {
-
-                foreach (string key in form["phoneNumber"])
-                {
-                    if (key != "")
-                    {
-                        person.PhoneEntity.Add(new PhoneNumberEntity { PhoneNumber = key });
-                    }
-                }
-
-                if (form.ContainsKey("address"))
-                {
-
-                    foreach (string key in form["adress"])
-                    {
-                        if (key != "")
-                        {
-
-                            person.Addresses.Add(new AddressEntity { Address = key });
-                        }
-                    }
-                }
-
-                _personContext.Add(person);
-                _personContext.SaveChanges();
+                _personService.AddPerson(form);
             }
 
-            return View("Index", viewModel);
+            return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
-            PersonEntity recordToDelete = _personContext.Person.Where(record => record.Id == Id).Include(record => record.Addresses).Include(record => record.PhoneEntity).First();
-            _personContext.Remove(recordToDelete);
-            _personContext.SaveChanges();
+            _personService.DeletePerson(id);
             return RedirectToAction("Index");
         }
 

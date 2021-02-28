@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 
-namespace PracticeTest.Models
+namespace PersonData.Models
 {
     public class PersonContext : DbContext
     {

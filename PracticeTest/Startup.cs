@@ -4,10 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PracticeTest.Models;
+using PersonData;
+using PersonData.Models;
+using PersonService;
 
 namespace PracticeTest
 {
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -20,7 +23,9 @@ namespace PracticeTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Configuration); 
             services.AddDbContext<PersonContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Myconnection")));
+            services.AddScoped<IPersonManipulation, PersonManipulation>();
             services.AddControllersWithViews();
         }
 

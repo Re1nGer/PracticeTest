@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PracticeTest.Models
+namespace PersonData.Models
 {
-    public class AddressEntity
+    public class PhoneNumberEntity
     {
         [Key]
-        public int AddressId { get; set; }
-
-        public string Address { get; set; }
+        public int Number_Id { get; set; }
 
         public int PersonId { get; set; }
+
+        public string PhoneNumber { get; set; }
 
 
     }

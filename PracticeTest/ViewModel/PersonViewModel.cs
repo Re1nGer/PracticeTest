@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using PracticeTest.Models; 
+﻿using System.Collections.Generic;
+using PersonData.Models;
 
 namespace PracticeTest.ViewModel
 {
